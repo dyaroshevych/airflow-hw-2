@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  airflow-webserver:
+    extends:
+      file: docker-compose-init.yaml
+      service: airflow-webserver
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+
+  # Extending Airflow Scheduler
+  airflow-scheduler:
+    extends:
+      file: docker-compose-init.yaml
+      service: airflow-scheduler
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+
+  # Extending Airflow Worker
+  airflow-worker:
+    extends:
+      file: docker-compose-init.yaml
+      service: airflow-worker
+
+  # Extending Airflow Triggerer
+  airflow-triggerer:
+    extends:
+      file: docker-compose-init.yaml
+      service: airflow-triggerer
+
+  # Extending Airflow Init
+  airflow-init:
+    extends:
+      file: docker-compose-init.yaml
+      service: airflow-init
+    environment:
+      _PIP_ADDITIONAL_REQUIREMENTS: "peopledatalabs beautifulsoup4 requests easyocr"
+      AIRFLOW_UID: 50000
+
+  airflow-cli:
+    extends:
+      file: docker-compose-init.yaml
+      service: airflow-cli
+
+  redis:
+    extends:
+      file: docker-compose-init.yaml
+      service: redis
+
+
+  postgres:
+    extends:
+      file: docker-compose-init.yaml
+      service: postgres
+    ports:
+      - "5432:5432"
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: customuser
+      POSTGRES_PASSWORD: custompassword
+      POSTGRES_DB: customdb
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+    restart: always
+    ports:
+      - "5433:5432"
+
+  flower:
+    extends:
+      file: docker-compose-init.yaml
+      service: flower
+
+volumes:
+  db-volume:
+  postgres-db-volume:

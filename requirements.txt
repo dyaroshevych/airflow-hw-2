@@ -1,0 +1,5 @@
+apache-airflow==2.8.0
+beautifulsoup4==4.12.2
+easyocr==1.7.1
+peopledatalabs==3.0.3
+requests==2.31.0
